@@ -9,7 +9,7 @@ var Game = function () {
 
         this.canvas.addEventListener("click", this.clickListener.bind(this));
 
-        this.cheese = new Cheese(0, this.canvas.height - 469);
+        this.cheese = new Cheese(0, this.canvas.height - 469, Levels[2]);
     };
 
     this.clickListener = function (e) {
