@@ -2,9 +2,6 @@ var Cheese = function (x, y, level) {
     this.image = new Image();
     this.image.src = "images/cheese.png";
 
-    this.bg = new Image();
-    this.bg.src = "images/bg.png";
-
     this.x = x || 0;
     this.y = y || 0;
 
@@ -69,16 +66,16 @@ Cheese.prototype.update = function (delta) {
 };
 
 Cheese.prototype.draw = function (context) {
-    context.drawImage(this.bg, 0, 0);
-    context.drawImage(this.image, this.x, this.y);
-
     context.save();
     context.translate(this.x, this.y);
+
+    context.drawImage(this.image, 0, 0);
     for (var i = 0; i < this.holes.length; i++) {
         this.holes[i].draw(context);
     }
     for (i = 0; i < this.rats.length; i++) {
         this.rats[i].draw(context);
     }
+
     context.restore();
 };
