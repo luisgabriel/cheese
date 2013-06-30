@@ -5,8 +5,6 @@ var Cheese = function (x, y, level) {
     this.x = x || 0;
     this.y = y || 0;
 
-    this._area = {x: 83, y: 113, width: 310, height: 264};
-
     this._createTimeout = 0;
 
     this.level = level;
