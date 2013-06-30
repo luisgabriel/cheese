@@ -6,10 +6,6 @@ var Hole = function (x, y, type) {
 
     this.x = x || 0;
     this.y = y || 0;
-
-    this.draw = function (context) {
-        context.drawImage(this.image, this.x - this.image.width/2, this.y - this.image.height/2);
-    };
 };
 
 Hole.images = [
@@ -18,3 +14,7 @@ Hole.images = [
     new Image(),
     new Image()
 ];
+
+Hole.prototype.draw = function (context) {
+    context.drawImage(this.image, this.x - this.image.width/2, this.y - this.image.height/2);
+};

@@ -28,58 +28,57 @@ var Cheese = function (x, y, level) {
         var enemy = this.level.enemies[i];
         this.rats[i] = new Rat(enemy.interval, enemy.probability);
     }
+};
 
+Cheese.prototype.clickEvent = function (point) {
+    this._click = point;
+};
 
-    this.clickEvent = function (point) {
-        this._click = point;
-    };
+Cheese.prototype.update = function (delta) {
+    var click = null;
+    if (this._click) {
+        click = {};
+        click.x = this._click.x - this.x;
+        click.y = this._click.y - this.y;
+    }
 
-    this.update = function (delta) {
-        var click = null;
-        if (this._click) {
-            click = {};
-            click.x = this._click.x - this.x;
-            click.y = this._click.y - this.y;
+    for (var i = 0; i < this.rats.length; i++) {
+        var rat = this.rats[i];
+
+        if (click) {
+            if (rat.isVisible() && rat.collides(click))
+                rat.kill();
         }
 
-        for (var i = 0; i < this.rats.length; i++) {
-            var rat = this.rats[i];
-
-            if (click) {
-                if (rat.isVisible() && rat.collides(click))
-                    rat.kill();
+        if (!rat.isVisible() && !rat.isDead()) {
+            if (this._createTimeout <= 0 && rat.probability > Math.random()) {
+                var hole = this.holes[Utils.getRandomInt(0, this.holes.length - 1)];
+                rat.show(hole);
             }
 
-            if (!rat.isVisible() && !rat.isDead()) {
-                if (this._createTimeout <= 0 && rat.probability > Math.random()) {
-                    var hole = this.holes[Utils.getRandomInt(0, this.holes.length - 1)];
-                    rat.show(hole);
-                }
-
-                if (this._createTimeout <= 0)
-                    this.hp--;
-            }
-            rat.update(delta);
+            if (this._createTimeout <= 0)
+                this.hp--;
         }
+        rat.update(delta);
+    }
 
-        this._click = null;
-        if (this._createTimeout <= 0)
-            this._createTimeout = 1000;
-        this._createTimeout -= delta;
-    };
+    this._click = null;
+    if (this._createTimeout <= 0)
+        this._createTimeout = 1000;
+    this._createTimeout -= delta;
+};
 
-    this.draw = function (context) {
-        context.drawImage(this.bg, 0, 0);
-        context.drawImage(this.image, this.x, this.y);
+Cheese.prototype.draw = function (context) {
+    context.drawImage(this.bg, 0, 0);
+    context.drawImage(this.image, this.x, this.y);
 
-        context.save();
-        context.translate(this.x, this.y);
-        for (var i = 0; i < this.holes.length; i++) {
-            this.holes[i].draw(context);
-        }
-        for (i = 0; i < this.rats.length; i++) {
-            this.rats[i].draw(context);
-        }
-        context.restore();
-    };
+    context.save();
+    context.translate(this.x, this.y);
+    for (var i = 0; i < this.holes.length; i++) {
+        this.holes[i].draw(context);
+    }
+    for (i = 0; i < this.rats.length; i++) {
+        this.rats[i].draw(context);
+    }
+    context.restore();
 };
