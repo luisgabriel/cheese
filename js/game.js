@@ -17,7 +17,8 @@ Game.prototype.init = function () {
     this._inputs = [];
     this._canvas.addEventListener("click", this.onClicked.bind(this));
 
-    this._cheese = new Cheese(0, this._canvas.height - 469, Levels[2]);
+    this._cheese = new Cheese(0, this._canvas.height - 469);
+    this._cheese.loadLevel(Levels[2]);
 };
 
 Game.prototype.onClicked = function (e) {

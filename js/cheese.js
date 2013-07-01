@@ -1,4 +1,4 @@
-var Cheese = function (x, y, level) {
+var Cheese = function (x, y) {
     this.image = new Image();
     this.image.src = "images/cheese.png";
 
@@ -7,20 +7,22 @@ var Cheese = function (x, y, level) {
 
     this._createTimeout = 0;
 
-    this.level = level;
+    this.hp = 0;
+};
 
-    this.hp = this.level.hp;
+Cheese.prototype.loadLevel = function (level) {
+    this.hp = level.hp;
 
     var i;
     this.holes = [];
-    for (i = 0; i < this.level.holes.length; i++) {
-        var hole = this.level.holes[i];
+    for (i = 0; i < level.holes.length; i++) {
+        var hole = level.holes[i];
         this.holes[i] = new Hole(hole.x, hole.y, hole.type);
     }
 
     this.rats = [];
-    for (i = 0; i < this.level.enemies.length; i++) {
-        var enemy = this.level.enemies[i];
+    for (i = 0; i < level.enemies.length; i++) {
+        var enemy = level.enemies[i];
         this.rats[i] = new Rat(enemy.interval, enemy.probability);
     }
 };
