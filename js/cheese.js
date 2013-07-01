@@ -25,25 +25,27 @@ var Cheese = function (x, y, level) {
     }
 };
 
-Cheese.prototype.clickEvent = function (point) {
-    this._click = point;
-};
+Cheese.prototype.processInputs = function (clicks) {
+    if (!clicks)
+        return;
 
-Cheese.prototype.update = function (delta) {
-    var click = null;
-    if (this._click) {
-        click = {};
-        click.x = this._click.x - this.x;
-        click.y = this._click.y - this.y;
-    }
+    for (var i = 0; i < clicks.length; i++) {
+        var click = {
+            x: clicks[i].x - this.x,
+            y: clicks[i].y - this.y
+        };
 
-    for (var i = 0; i < this.rats.length; i++) {
-        var rat = this.rats[i];
-
-        if (click) {
+        for (var j = 0; j < this.rats.length; j++) {
+            var rat = this.rats[j];
             if (rat.isVisible() && rat.collides(click))
                 rat.kill();
         }
+    }
+};
+
+Cheese.prototype.update = function (delta) {
+    for (var i = 0; i < this.rats.length; i++) {
+        var rat = this.rats[i];
 
         if (!rat.isVisible() && !rat.isDead()) {
             if (this._createTimeout <= 0 && rat.probability > Math.random()) {
@@ -57,7 +59,6 @@ Cheese.prototype.update = function (delta) {
         rat.update(delta);
     }
 
-    this._click = null;
     if (this._createTimeout <= 0)
         this._createTimeout = 1000;
     this._createTimeout -= delta;
