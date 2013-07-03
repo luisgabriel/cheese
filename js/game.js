@@ -4,11 +4,13 @@ var Game = function () {
     this._canvas = null;
     this._inputs = null;
     this._currentLevel = null;
+    this._pauseButton = null;
 
     this._bg = new Image();
     this._bg.src = "images/bg.png";
 
     this._running = false;
+    this._pause = false;
 };
 
 Game.TICK = 30;
@@ -19,6 +21,9 @@ Game.prototype.init = function () {
 
     this._inputs = [];
     this._canvas.addEventListener("click", this.onClicked.bind(this));
+
+    this._pauseButton = document.getElementById("pause_button");
+    this._pauseButton.addEventListener("click", this.onPauseClicked.bind(this));
 
     this._currentLevel = Levels[1];
     this._cheese = new Cheese(0, this._canvas.height - 469);
@@ -31,7 +36,24 @@ Game.prototype.reset = function () {
     this._cheese.loadLevel(this._currentLevel);
 };
 
+Game.prototype.onPauseClicked = function (e) {
+    if (!this._running)
+        return;
+
+    this._pause = !this._pause;
+    if (!this._pause) {
+        this._mainLoop();
+        this._pauseButton.src = "images/pause.png"
+    } else {
+        Utils.drawText(this._context, "PAUSE", 164, 200, 50);
+        this._pauseButton.src = "images/play.png"
+    }
+};
+
 Game.prototype.onClicked = function (e) {
+    if (this._pause)
+        return;
+
     if (!this._running) {
         this.reset();
         this.start();
@@ -51,7 +73,7 @@ Game.prototype.start = function () {
 };
 
 Game.prototype._mainLoop = function () {
-    if (!this._running)
+    if (!this._running || this._pause)
         return;
 
     if (this._cheese.hp < this._currentLevel.minScore) {

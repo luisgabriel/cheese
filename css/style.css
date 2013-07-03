@@ -2,3 +2,13 @@ body {
     margin: 0;
     padding: 0;
 }
+
+#content {
+    display: inline-block;
+    position: relative;
+}
+
+#pause_button {
+    position: absolute;
+    right: 0
+}
