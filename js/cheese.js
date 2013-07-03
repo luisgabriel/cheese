@@ -50,19 +50,22 @@ Cheese.prototype.update = function (delta) {
         var rat = this.rats[i];
 
         if (!rat.isVisible() && !rat.isDead()) {
-            if (this._createTimeout <= 0 && rat.probability > Math.random()) {
-                var hole = this.holes[Utils.getRandomInt(0, this.holes.length - 1)];
-                rat.show(hole);
-            }
-
-            if (this._createTimeout <= 0)
+            if (this._createTimeout <= 0) {
                 this.hp--;
+
+                if (rat.probability > Math.random()) {
+                    var holeIndex = Utils.getRandomInt(0, this.holes.length - 1);
+                    var hole = this.holes[holeIndex];
+                    rat.show(hole);
+                }
+            }
         }
         rat.update(delta);
     }
 
     if (this._createTimeout <= 0)
         this._createTimeout = 1000;
+
     this._createTimeout -= delta;
 };
 
