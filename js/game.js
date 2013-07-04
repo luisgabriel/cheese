@@ -79,6 +79,9 @@ Game.prototype._mainLoop = function () {
     if (this._cheese.hp < this._currentLevel.minScore) {
         this._gameOver();
         return;
+    } else if (this._cheese.aliveRats === 0) {
+        this._youWon();
+        return;
     }
 
     this._processInput();
@@ -91,7 +94,13 @@ Game.prototype._mainLoop = function () {
 Game.prototype._gameOver = function () {
     this._running = false;
     Utils.drawText(this._context, "GAME OVER!", 74, 200, 50);
-    Utils.drawText(this._context, "Click somewhere to restart the game.", 110, 220, 15);
+    Utils.drawText(this._context, "Click anywhere to restart the game.", 120, 220, 15);
+};
+
+Game.prototype._youWon = function () {
+    this._running = false;
+    Utils.drawText(this._context, "YOU WON!", 104, 200, 50);
+    Utils.drawText(this._context, "Click anywhere to restart the game.", 120, 220, 15);
 };
 
 Game.prototype._processInput = function () {

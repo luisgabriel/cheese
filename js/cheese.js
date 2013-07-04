@@ -8,6 +8,7 @@ var Cheese = function (x, y) {
     this._createTimeout = 0;
 
     this.hp = 0;
+    this.aliveRats = 0;
 };
 
 Cheese.prototype.loadLevel = function (level) {
@@ -24,6 +25,7 @@ Cheese.prototype.loadLevel = function (level) {
     for (i = 0; i < level.enemies.length; i++) {
         var enemy = level.enemies[i];
         this.rats[i] = new Rat(enemy.interval, enemy.probability);
+        this.aliveRats++;
     }
 };
 
@@ -39,8 +41,10 @@ Cheese.prototype.processInputs = function (clicks) {
 
         for (var j = 0; j < this.rats.length; j++) {
             var rat = this.rats[j];
-            if (rat.isVisible() && rat.collides(click))
+            if (rat.isVisible() && rat.collides(click)) {
                 rat.kill();
+                this.aliveRats--;
+            }
         }
     }
 };
